@@ -41,7 +41,7 @@ public class ExRateCtrl {
 	public Map<?, ?> exRateRW(){
 		p.accept("exRateRW 진입");
 
-		exProxy.rwTXT();
+	//	exProxy.rwTXT();
 		trunk.put(Arrays.asList("msg"), Arrays.asList("success"));
 		return trunk.get();
 	}

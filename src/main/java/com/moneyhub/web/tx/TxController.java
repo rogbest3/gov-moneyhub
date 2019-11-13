@@ -65,9 +65,9 @@ public class TxController {
 		return trunk.get();
 	}
 	
-	@GetMapping("/write/exrate")
-	public Map<?, ?> writeExrate() {
-		String exrateCount = txService.writeExrates();
+	@GetMapping("/write/exrate/{country}")
+	public Map<?, ?> writeExrate(@RequestBody String country) {
+		String exrateCount = txService.writeExrates(country);
 		trunk.put(Arrays.asList("exrateCount"), Arrays.asList(exrateCount));
 		return trunk.get();
 	}

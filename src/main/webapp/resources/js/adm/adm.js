@@ -264,14 +264,14 @@ adm =(()=>{
 			'  <select name="exrate" size="1" >'+	//	multiple
 			'  </select>'+
 			'  <br>'+
-			'  <input class="form-control mr-sm-2" value="송금" type="text" placeholder="exrate" aria-label="Search">'+
+			'  <input class="form-control mr-sm-2" value="국가" type="text" placeholder="exrate" aria-label="Search">'+
 			'</form>')
 		.addClass('form-inline my-2 my-lg-0')
 		.appendTo('#right')
 		$('#exrate_form').css({padding : '0 auto', 'padding-top' : '5%'  })	//'padding-top' : '5%' 
 		$('#exrate_form select').css({ 'margin-left' : '20%' , 'margin-right' : '1%'})
 		
-		$.each(['직접입력', 'naver.com', 'daum.net', 'google.com', 'youtube.com'], (i, j)=>{
+		$.each(['USD', 'CNY', 'JPY', 'EUR'], (i, j)=>{
 			$('<option value="'+ j +'">'+ j +'</option>')
 			.appendTo('#exrate_form select')
 		})
@@ -280,16 +280,16 @@ adm =(()=>{
 		.appendTo('#exrate_form')
 		.click(e=>{
 			e.preventDefault()		
-			let arr = [$('form#exrate_form select[name="exrate"]').val(),
-						$('form#exrate_form input[type="text"]').val()]
-			
+			alert('전송 확인')
+			let arr = [$('form#exrate_form select[name="exrate"]').val()]
+			alert('전송 확인 arr : ' + arr)
 			if(	!$.fn.nullChecker(arr) ){			
 		//		alert(arr[0] + ', '+ arr[1])
-				$.getJSON( _	+ '/tx/write/exrate' + arr[0] +'/' + arr[1], d=>{		// form 태그의 id란 뜻
+				$.getJSON( _	+ '/tx/write/exrate/' + arr, d=>{		// form 태그의 id란 뜻
 					alert(d.msg)
 				})
 			}
-		})
+		})/*
 		$('<a>달러 환율 데이터 입력</a></br>')
 		.appendTo('#right')
 		.click(e=>{
@@ -305,7 +305,7 @@ adm =(()=>{
 			$.getJSON(_+'/tx/write/exrate', d=>{
 				alert( '환율 데이터 입력 성공 여부: ' + d.msg )
 			})
-		})
+		})*/
 	}
 	return {onCreate}
 })()

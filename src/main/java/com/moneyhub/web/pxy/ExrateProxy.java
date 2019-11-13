@@ -30,13 +30,23 @@ public class ExrateProxy {
 //	map.forEach((k, v) -> System.out.println(String.format("%s : %s", k, v)));
 }*/
 	@Transactional
-	public void rwTXT(){
+	public void rwTXT(String country){
 		String line="";
 	//	List<ExRate> tmpList = new ArrayList<>();
 		BufferedReader reader = null;
-	
+		String file = "";
 		try {
-			reader = Files.newBufferedReader(Paths.get(Path.EXRATE_FILE_PATH.toString() +"달러_환율변동조회_20191113.tsv"));
+			switch (country) {
+			case "USD":
+				file = "달러_환율변동조회_20191113.tsv";
+				break;
+			case "CNY":
+				file = "위안_환율변동조회_20191113.tsv";
+				break;
+			default:
+				break;
+			}
+			reader = Files.newBufferedReader(Paths.get(Path.EXRATE_FILE_PATH.toString() +file));
 			Charset.forName("UTF-8");
 	//		string = reader.readLine();
 			
@@ -58,7 +68,7 @@ public class ExrateProxy {
 	            exr.setDollarRate(arr[10]);*/
 	            exr.setExrate(arr[7]);
 	            exr.setBdate(arr[0]);
-	            exr.setCntcd("USD");
+	            exr.setCntcd(country);
 	            System.out.println(exr.toString());
 	            exRateMapper.insertExRate(exr);
 			}
@@ -68,7 +78,7 @@ public class ExrateProxy {
 		}
 	}
 	@Transactional
-	public void insertExrates() {
-		rwTXT();
+	public void insertExrates(String country) {
+		rwTXT(country);
 	}
 }

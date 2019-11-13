@@ -70,8 +70,8 @@ public class TxService {	// POJO
 		return artMapper.countArticle();
 	}
 	@Transactional
-	public String writeExrates() {
-		exProxy.insertExrates();
+	public String writeExrates(String country) {
+		exProxy.insertExrates(country);
 		return exMapper.countExrate();
 	}
 }
