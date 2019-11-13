@@ -251,7 +251,7 @@ adm =(()=>{
 			$.getJSON(_+'/exrates/delete/table', d=>{
 				alert( '테이블 삭제 성공 여부 : ' + d.msg )
 			})
-		})
+		})//
 		$('<form id="exrate_form" action="">'+
 			'  <select name="exrate" size="1" >'+	//	multiple
 			'  </select>'+
