@@ -1,16 +1,20 @@
 package com.moneyhub.web.pxy;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.moneyhub.web.aop.TxMapper;
 import com.moneyhub.web.cus.Customer;
 import com.moneyhub.web.cus.CustomerMapper;
+import com.moneyhub.web.enums.SQL;
+import com.moneyhub.web.tx.TxMapper;
 
 @Component("manager")
 public class CustomerProxy extends Proxy{
@@ -110,7 +114,7 @@ public class CustomerProxy extends Proxy{
 	public boolean existEmail(String cemail) {
 		boolean flag = false;
 		
-		if( cusMapper.existEmail(cemail) == 1 ) {	// 중복이면 true
+		if( txMapper.existEmail(cemail) == 1 ) {	// 중복이면 true
 			flag = true;
 		}
 		return flag;
@@ -119,18 +123,21 @@ public class CustomerProxy extends Proxy{
 	@Transactional
 	public void makeCustomer() {
 		String cemail = makeEmail();
-		
+	
 		if(!existEmail(cemail)) {
 			cus.setCemail(cemail);
 			cus.setCpwd(makePwd());
 			cus.setCname(makeName());
 			cus.setCdate(makedate());
-			cusMapper.insertCustomer(cus);
+			txMapper.insertCustomer(cus);
+
 			System.out.println("join 성공");
 		}else {
 			System.out.println("이메일 중복 - join 실패");
 		}
+//		return new User(makeUserid(),"1",makeUsername(),makeBirthday(),makeGender(),makeTelephone(),makePetType());
 	}
+	
 /*	public void makeCusRepet(int num) {
 		for(int i = 0; i<num; i++)
 			makeCustomer();
@@ -144,6 +151,8 @@ public class CustomerProxy extends Proxy{
 
 	public void truncateCustomers() {
 //		cusMapper.truncateCustomer(paramMap);
-		
+		HashMap<String, String> map = new HashMap<>();
+		map.put("TRUNCATE_CUSTOMER", SQL.TRUNCATE_CUSTOMER.toString());
+		cusMapper.truncateCustomer(map);
 	}
 }

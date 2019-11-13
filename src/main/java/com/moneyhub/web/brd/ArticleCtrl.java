@@ -1,5 +1,7 @@
 package com.moneyhub.web.brd;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,17 +21,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.moneyhub.web.aop.TxService;
 import com.moneyhub.web.cmm.IConsumer;
 import com.moneyhub.web.cmm.IFunction;
 import com.moneyhub.web.cmm.IPredicate;
 import com.moneyhub.web.cmm.ISupplier;
 import com.moneyhub.web.cus.Customer;
 import com.moneyhub.web.cus.CustomerCtrl;
+import com.moneyhub.web.enums.Path;
+import com.moneyhub.web.enums.SQL;
 import com.moneyhub.web.pxy.PageProxy;
 import com.moneyhub.web.pxy.Trunk;
+import com.moneyhub.web.tx.TxService;
 import com.moneyhub.web.pxy.Box;
 import com.moneyhub.web.utl.Printer;
 
@@ -48,7 +53,7 @@ public class ArticleCtrl {
 	@Autowired TxService txService;
 //	@Autowired PageProxy pxy;
 //	@Autowired ProxyMap map;
-	@Qualifier PageProxy pager;
+	@Autowired PageProxy pager;
 //	@Autowired Box box;
 	@Autowired Trunk<Object> trunk;
 	
@@ -70,7 +75,6 @@ public class ArticleCtrl {
 		pager.setPageSize(pager.parseInt(pageSize));
 		pager.paging();
 		
-		box.clear();
 		ISupplier <List<Article>> c = () -> articleMapper.selectAll(pager);
 		printer.accept("해당 글목록 : " + c.get());
 		
@@ -107,9 +111,51 @@ public class ArticleCtrl {
 	@DeleteMapping("/{artSeq}")
 	public Map<?, ?> delete(@PathVariable String artSeq) {
 		printer.accept("delete로 들어옴");
-		IConsumer<String> d = t -> articleMapper.deleteArticle(artSeq);
+		IConsumer<String> d = t -> articleMapper.deleteArticle(t);
 		d.accept(artSeq);
 //		map.clear();
 		return trunk.get();
+	}
+	
+	@GetMapping("/create/table")
+	public Map<?, ?> createArticle(){
+		HashMap<String, String> paramMap = new HashMap<>();
+		paramMap.put("CREATE_ARTICLE", SQL.CREATE_ARTICLE.toString());
+		printer.accept("테이블 쿼리 생성 : \n" + paramMap.get("CREATE_ARTICLE"));
+		IConsumer<HashMap<String, String>> c = t -> articleMapper.createArticle(t);
+		c.accept(paramMap);
+		paramMap.clear();
+		paramMap.put("msg", "SUCCESS");
+		
+		return paramMap;
+	}
+	
+	@GetMapping("/write")
+	public Map<?, ?> writeArticle(){
+		HashMap<String, String> paramMap = new HashMap<>();
+		paramMap.put("INSERT_ARTICLE", SQL.INSERT_ARTICLE.toString());
+		printer.accept("테이블 쿼리 생성 : \n" + paramMap.get("INSERT_ARTICLE"));
+		IConsumer<HashMap<String, String>> c = t -> articleMapper.insertArticle1(t);
+		c.accept(paramMap);
+		paramMap.clear();
+		paramMap.put("msg", "SUCCESS");
+		
+		return paramMap;
+	}
+
+	@GetMapping("/fileupload")
+	public void fileUpload(MultipartFile[] uploadFile) {
+		printer.accept("파일 업로드");
+		String uploadFolder = Path.UPLOAD_PATH.toString();
+		for(MultipartFile f : uploadFile) {
+			String fname = f.getOriginalFilename();
+			fname = fname.substring(fname.lastIndexOf("\\"+1));
+			File saveFile = new File(uploadFolder, fname);
+			try {
+				f.transferTo(saveFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

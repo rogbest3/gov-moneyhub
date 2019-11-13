@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ExRate {
 		
-	private String bsDate, mBuy, mSell, remSend, remReceive, tcBuy, fcbSell, bsRate, befCon, exCommission, dollarRate;
+//	private String bsDate, mBuy, mSell, remSend, remReceive, tcBuy, fcbSell, bsRate, befCon, exCommission, dollarRate;
+	private String exno, cntcd, bdate, exrate, cmem, cdate, umem, udate;
 }

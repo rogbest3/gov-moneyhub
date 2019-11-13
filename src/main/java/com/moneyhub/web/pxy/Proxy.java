@@ -28,6 +28,11 @@ public class Proxy {
 		Function<Integer, int[]> f = int[] :: new;
 		return f.apply(size);
 	}
+
+	public String string(Object object) {
+		Function<Object, String> f = String :: valueOf;
+		return f.apply(object);
+	}
 }
  
 /*class PageProxyDiv extends Proxy{

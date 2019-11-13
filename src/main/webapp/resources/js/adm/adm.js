@@ -66,11 +66,12 @@ adm =(()=>{
 		$.each([	// name을 주고 구분
 			{txt : '웹크롤링', name : 'web_crawl'},
 			{txt : '고객관리', name : 'cust_mgmt'}, 
+			{txt : '커뮤니티관리', name : 'comm_mgmt'},
 			{txt : '상품등록', name : 'item_reg'}, 
 			{txt : '상품조회', name : 'item_srch'}, 
 			{txt : '상품수정', name : 'item_mod'}, 
 			{txt : '상품삭제', name : 'item_del'},
-			{txt : '환율등록', name : 'item_exr_reg'}], 
+			{txt : '환율관리', name : 'exr_mgmt'}], 
 			(i, j)=>{
 				$('<div name="'+ j.name +'">'+ j.txt +'</div>')
 				.appendTo('#left')
@@ -85,6 +86,9 @@ adm =(()=>{
 					case 'cust_mgmt' : 
 						cust_mgmt()
 						break
+					case 'comm_mgmt' :
+						comm_mgmt()
+						break
 					case 'item_reg' :
 						
 						break
@@ -98,9 +102,10 @@ adm =(()=>{
 						
 						break	
 					case 'exr_mgmt' :
-						$.getJSON( _+'/exrate/', d=>{
+						exr_mgmt()
+						/*$.getJSON( _+'/exrate/', d=>{
 							alert(d.msg)
-						})
+						})*/
 						break
 					}
 			})
@@ -113,18 +118,14 @@ adm =(()=>{
 			'  <select name="site" size="1" >'+	//	multiple
 			'  </select>'+
 			'  <br>'+
-/*			'  <button id="news_btn">이동</button>'+
-			'</form>'+
-			'<form class="form-inline my-2 my-lg-0">'+*/
-			'  <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">'+
-//			'  <button id="crawl_btn" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>'+
+			'  <input class="form-control mr-sm-2" value="송금" type="text" placeholder="Search" aria-label="Search">'+
 			'</form>')
 		.addClass('form-inline my-2 my-lg-0')
 		.appendTo('#right')
 		$('#crawl_form_id').css({padding : '0 auto', 'padding-top' : '5%'  })	//'padding-top' : '5%' 
 		$('#crawl_form_id select').css({ 'margin-left' : '20%' , 'margin-right' : '1%'})
 		
-		$.each(['naver.com', 'daum.net', 'google.com', 'youtube.com'], (i, j)=>{
+		$.each(['직접입력', 'naver.com', 'daum.net', 'google.com', 'youtube.com'], (i, j)=>{
 			$('<option value="'+ j +'">'+ j +'</option>')
 			.appendTo('#crawl_form_id select')
 		})
@@ -145,6 +146,7 @@ adm =(()=>{
 		})
 	}
 	let cust_mgmt=()=>{
+		$('#right').empty()
 		$('<a>데이터베이스  생성</a></br>')
 		.appendTo('#right')
 		.click(e=>{
@@ -202,10 +204,108 @@ adm =(()=>{
 				alert( '테이블 수정 성공 여부: ' + d.msg )
 			})
 		})
+		$('<a>게시글 정보 1개 입력</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/articles/write', d=>{
+				alert( '게시글 입력 성공 여부: ' + d.msg )
+			})
+		})
 		
 	}
-	let exr_mgmt =()=>{
-		$('<a></a>')
+
+	let comm_mgmt =()=>{
+		$('#right').empty()
+		$('<a>커뮤니티 테이블  생성</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/articles/create/table', d=>{
+				alert( '커뮤니티 테이블 생성 성공 여부 : ' + d.msg )
+			})
+		})
+		$('<a>게시글 대량 입력(수업)</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/tx/write/arts', d=>{
+				alert( '게시글 입력 성공 여부: ' + d.msg )
+			})
+		})
+		$('<a>게시글 대량 입력(my)</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/tx/write/arts', d=>{
+				alert( '게시글 입력 성공 여부: ' + d.msg )
+			})
+		})
+	}
+	let exr_mgmt=()=>{
+		$('#right').empty()
+		$('<a>환율 테이블 생성</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/exrates/create/table', d=>{
+				alert( '테이블 생성 성공 여부 : ' + d.msg )
+			})
+		})
+		$('<a>환율 테이블 삭제</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/exrates/delete/table', d=>{
+				alert( '테이블 삭제 성공 여부 : ' + d.msg )
+			})
+		})
+		$('<form id="exrate_form" action="">'+
+			'  <select name="exrate" size="1" >'+	//	multiple
+			'  </select>'+
+			'  <br>'+
+			'  <input class="form-control mr-sm-2" value="송금" type="text" placeholder="exrate" aria-label="Search">'+
+			'</form>')
+		.addClass('form-inline my-2 my-lg-0')
+		.appendTo('#right')
+		$('#exrate_form').css({padding : '0 auto', 'padding-top' : '5%'  })	//'padding-top' : '5%' 
+		$('#exrate_form select').css({ 'margin-left' : '20%' , 'margin-right' : '1%'})
+		
+		$.each(['직접입력', 'naver.com', 'daum.net', 'google.com', 'youtube.com'], (i, j)=>{
+			$('<option value="'+ j +'">'+ j +'</option>')
+			.appendTo('#exrate_form select')
+		})
+		
+		$('<button class="btn btn-outline-success my-2 my-sm-0" type="submit">저장</button>')
+		.appendTo('#exrate_form')
+		.click(e=>{
+			e.preventDefault()		
+			let arr = [$('form#exrate_form select[name="exrate"]').val(),
+						$('form#exrate_form input[type="text"]').val()]
+			
+			if(	!$.fn.nullChecker(arr) ){			
+		//		alert(arr[0] + ', '+ arr[1])
+				$.getJSON( _	+ '/tx/write/exrate' + arr[0] +'/' + arr[1], d=>{		// form 태그의 id란 뜻
+					alert(d.msg)
+				})
+			}
+		})
+		$('<a>달러 환율 데이터 입력</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/tx/write/exrate', d=>{
+				alert( '환율 데이터 입력 성공 여부: ' + d.msg )
+			})
+		})
+		$('<a>위안 환율 데이터 입력</a></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/tx/write/exrate', d=>{
+				alert( '환율 데이터 입력 성공 여부: ' + d.msg )
+			})
+		})
 	}
 	return {onCreate}
 })()

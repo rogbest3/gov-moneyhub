@@ -7,8 +7,9 @@
 <mapper namespace="com.moneyhub.web.brd.ArticleMapper">
 
     <insert id="insertArticle" parameterType="Article" >
-        insert into Article (cid, board_type, title, content) values (
-             #{cid}, #{boardType}, #{title}, #{content}
+        insert into Article (cemail, boardtype, title, content) values (
+        	'1', '게시판', 'test1', '1234'
+<!--              #{cemail}, #{boardType}, #{title}, #{content} -->
         )
     </insert>
     <select id="countArticle" resultType="string">
@@ -19,7 +20,7 @@
     	SELECT A.BOARD_TYPE AS boardType, A.* FROM ARTICLE A
     </select> -->
     <select id="selectAll" resultType="Article" parameterType="Proxy">
-    	select BOARD_TYPE as boardType, A.*
+    	select A.*
 		from (select *
 			from article
 			order by ARTSEQ DESC ) A
@@ -34,5 +35,11 @@
 		SET TITLE = #{title}, CONTENT = #{content}
 		WHERE ARTSEQ = #{artSeq}
     </update>
+    <select id="createArticle" resultType="map">
+    	${CREATE_ARTICLE}
+    </select>
+    <select id="insertArticle1" resultType="map">
+    	${INSERT_ARTICLE}
+    </select>
 <!--  artSeq, image, cid, comments, msg, rating, type, title, content; -->
 </mapper>

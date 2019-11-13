@@ -6,10 +6,25 @@
 <mapper namespace="com.moneyhub.web.exr.ExRateMapper">
 	
 	<insert id="insertExRate" parameterType="ExRate" >
-        insert into EXRATE (BSDATE, MBUY, MSELL, REMSEND, REMRECEIVE, TCBUY, FCBSELL, BSRATE, BEFCON, EXCOMMISSION, DOLLARRATE) 
+      <!--   insert into EXRATE (BSDATE, MBUY, MSELL, REMSEND, REMRECEIVE, TCBUY, FCBSELL, BSRATE, BEFCON, EXCOMMISSION, DOLLARRATE) 
         values (
              #{bsDate}, #{mBuy}, #{mSell}, #{remSend}, #{remReceive}, #{tcBuy}, #{fcbSell}, #{bsRate}, #{befCon}, #{exCommission}, #{dollarRate} 
+        ) -->
+<!--         cntcd, bdate, exrate, cmem, cdate, umem, udate -->
+        insert into EXRATE (CNTCD, BDATE, EXRATE, CMEM, CDATE, UMEM, UDATE ) 
+        values (
+             #{cntcd}, #{bdate}, #{exrate}, #{cmem}, #{cdate}, #{umem}, #{udate}
         )
     </insert>
+    <select id="countExrate" resultType="string">
+    	select count(*) from exrate 
+    </select>
 
+	<select id="createExrate" parameterType="map">
+ 		${CREATE_EXRATE}
+ 	</select>
+ 	
+ 	<select id="deleteExrate" resultType="map">
+       ${DROP_EXRATE}
+    </select>
 </mapper>

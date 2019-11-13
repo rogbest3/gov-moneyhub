@@ -77,8 +77,8 @@ auth =(()=>{
 					success : d =>{
 						alert(d.cname + '님 환영합니다.')
 						
-						setCookie("CUSTOMERID", d.cemail)
-						alert('저장된 쿠기 : ' + getCookie("CUSTOMERID"))
+						setCookie("CEMAIL", d.cemail)
+						alert('저장된 쿠기 : ' + getCookie("CEMAIL"))
 						brd.onCreate()
 						
 						/*	$.when(

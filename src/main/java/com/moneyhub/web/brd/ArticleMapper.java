@@ -1,5 +1,6 @@
 package com.moneyhub.web.brd;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -14,5 +15,7 @@ public interface ArticleMapper {
 	public List<Article> selectAll(PageProxy pxy);
 	public void deleteArticle(String artSeq);
 	public void updateArticle(Article param);
-
+	
+	public void createArticle(HashMap<String, String> paramMap);
+	public void insertArticle1(HashMap<String, String> paramMap);
 }

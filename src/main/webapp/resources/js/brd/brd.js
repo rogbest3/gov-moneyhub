@@ -211,7 +211,7 @@ brd =(()=>{
 	//	$('#write').val('테스트')	// input에 값 직접 입력
 		$('#suggerstions').remove()
 		alert('>>>> ')
-		$('#write_form input[name="writer"]').val(getCookie("CLIENTID"))
+		$('#write_form input[name="writer"]').val(getCookie("CEMAIL"))
 		
 		$('<input>', {
 		//	type : 'submit',
@@ -224,14 +224,13 @@ brd =(()=>{
 		.click(e=>{
 			e.preventDefault()
 		})
-		
+
 		$('<input>', {
 		//	type :  'submit',
 			value : '전송',
 			style : 'float:right;width:100px;margin-right:10px',
 		})
 		.addClass('btn btn-primary')
-	//	.css({'float': 'right', 'width': '100px', 'margin-right': '10px' })
 		.appendTo('#write_form')
 		.click(e=>{
 			e.preventDefault()
@@ -262,13 +261,55 @@ brd =(()=>{
 				}
 			}) 
 		})
+		$('<input>', {
+//			id :'fileupload',
+			value : '파일업로드',
+			style : 'float:right;width:110px;margin-right:10px;',			
+		})
+		.addClass('btn btn-warning')
+		.appendTo('#write_form')
+		.click(e=>{
+			e.preventDefault()
+			
+			let formData = new FormData()
+			let inpurFile = $('#upload')
+			let files = inpurFile[0].files
+			
+		
+			alert(files.lenth)
+			let i=0
+			for(; i<inputFile.length;i++){
+				formData.append('uploadFile', inputFile[i])
+			}
+			$.ajax({
+				url : _+ '/articles/fileupload',
+				processData : false,
+				contentType : false,
+				data : formData, // JSON 아님
+				type : 'POST',
+				success : d=>{
+					alert('파일업로드 성공')
+				},
+				error : e=>{
+					alert('파일업로드 실패')
+				}
+			})
+				
+		})
+		
+		$('<input>',{
+			multiple : 'multiple',
+			type : 'file', 
+			id : 'upload'
+		})
+		.appendTo('#write_form')
 	}
 	
 
 	let detail =x=>{
-		$('#recent_updates').html(brd_vue.brd_write( getCookie("CLIENTID") ))
+		$('#recent_updates').html(brd_vue.brd_write( getCookie("CEMAIL") ))
 		$('#suggerstions').remove()		
-		$('#write_form input[name="writer"]').val(getCookie("CLIENTID"))
+		$('#write_form input[name="writer"]').val(getCookie("CEMAIL"))
 		$('#recent_updates div.container-fluid h1').html('ARTICLE DETAIL')
 //		$('#recent_updates div.container-fluid').html('<h1>ARTICLE DETAIL</h1>') - 하면 id, title, content 칸 모두 없어짐
 		$('#write_form input[name="writer"]').val(x.cemail)
