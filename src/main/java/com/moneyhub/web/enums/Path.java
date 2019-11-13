@@ -18,7 +18,8 @@ public enum Path {
 			break;
 			
 		case EXRATE_FILE_PATH:	// 실경로 
-			result = "C:\\Users\\admin\\GOVF1\\eGovFrameDev-3.8.0-64bit\\workspace\\moneyhub\\src\\main\\resources\\txt\\";
+		//	result = "C:\\Users\\admin\\GOVF1\\eGovFrameDev-3.8.0-64bit\\workspace\\moneyhub\\src\\main\\resources\\txt\\";
+			result = "C:\\Users\\rogbe\\GOVF\\eGovFrameDev-3.8.0-64bit\\workspace\\gov-moneyhub\\src\\main\\resources\\txt\\";	//myhome
 			break;
 		
 		}

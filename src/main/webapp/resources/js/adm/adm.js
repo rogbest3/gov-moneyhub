@@ -65,12 +65,11 @@ adm =(()=>{
 
 		$.each([	// name을 주고 구분
 			{txt : '웹크롤링', name : 'web_crawl'},
-			{txt : '고객관리', name : 'cust_mgmt'}, 
-			{txt : '커뮤니티관리', name : 'comm_mgmt'},
-			{txt : '상품등록', name : 'item_reg'}, 
-			{txt : '상품조회', name : 'item_srch'}, 
-			{txt : '상품수정', name : 'item_mod'}, 
-			{txt : '상품삭제', name : 'item_del'},
+			{txt : '고객 관리', name : 'cust_mgmt'}, 
+			{txt : '거래 관리', name : 'trd_mgmt'},
+			{txt : '커뮤니티 관리', name : 'comm_mgmt'},
+			{txt : '계좌번호 관리', name : 'accnt_mgmt'}, 
+			{txt : '계좌번호이력 관리', name : 'acchis_mgmt'}, 
 			{txt : '환율관리', name : 'exr_mgmt'}], 
 			(i, j)=>{
 				$('<div name="'+ j.name +'">'+ j.txt +'</div>')
@@ -89,23 +88,17 @@ adm =(()=>{
 					case 'comm_mgmt' :
 						comm_mgmt()
 						break
-					case 'item_reg' :
-						
+					case 'accnt_mgmt' :
+						accnt_mgmt()
 						break
-					case 'item_srch' :
-						
+					case 'acchis_mgmt' :
+						acchis_mgmt()
 						break
-					case 'item_mod' :
-						
-						break	
-					case 'item_del' :
-						
+					case 'trd_mgmt' :
+						trd_mgmt()
 						break	
 					case 'exr_mgmt' :
 						exr_mgmt()
-						/*$.getJSON( _+'/exrate/', d=>{
-							alert(d.msg)
-						})*/
 						break
 					}
 			})
@@ -147,7 +140,7 @@ adm =(()=>{
 	}
 	let cust_mgmt=()=>{
 		$('#right').empty()
-		$('<a>데이터베이스  생성</a></br>')
+		$('<a>데이터베이스  생성</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -155,7 +148,7 @@ adm =(()=>{
 				alert( 'DB 생성 성공 여부 : ' + d.msg )
 			})
 		})
-		$('<a>고객 테이블 생성</a></br>')
+		$('<a>고객 테이블 생성</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -163,24 +156,8 @@ adm =(()=>{
 				alert( '테이블 생성 성공 여부 : ' + d.msg )
 			})
 		})
-		$('<a>계좌번호 테이블 생성</a></br>')
-		.appendTo('#right')
-		.click(e=>{
-			e.preventDefault()
-			$.getJSON(_+'/account/create/table', d=>{
-				alert( '테이블 생성 성공 여부 : ' + d.msg )
-			})
-		})
-		$('<a>계좌번호이력 테이블 생성</a></br>')
-		.appendTo('#right')
-		.click(e=>{
-			e.preventDefault()
-			$.getJSON(_+'/accountHistory/create/table', d=>{
-				alert( '테이블 생성 성공 여부 : ' + d.msg )
-			})
-		})
 		
-		$('<a>고객 테이블 삭제</a></br>')
+		$('<a>고객 테이블 삭제</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -188,7 +165,7 @@ adm =(()=>{
 				alert( '테이블 생성 성공 여부 : ' + d.msg )
 			})
 		})
-		$('<a>고객 정보 대량 입력</a></br>')
+		$('<a>고객 정보 대량 입력</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -196,7 +173,7 @@ adm =(()=>{
 				alert( '테이블 수정 성공 여부: ' + d.msg )
 			})
 		})
-		$('<a>전체 고객 정보 삭제</a></br>')
+		$('<a>전체 고객 정보 삭제</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -204,20 +181,11 @@ adm =(()=>{
 				alert( '테이블 수정 성공 여부: ' + d.msg )
 			})
 		})
-		$('<a>게시글 정보 1개 입력</a></br>')
-		.appendTo('#right')
-		.click(e=>{
-			e.preventDefault()
-			$.getJSON(_+'/articles/write', d=>{
-				alert( '게시글 입력 성공 여부: ' + d.msg )
-			})
-		})
-		
 	}
 
 	let comm_mgmt =()=>{
 		$('#right').empty()
-		$('<a>커뮤니티 테이블  생성</a></br>')
+		$('<a>커뮤니티 테이블  생성</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -225,15 +193,7 @@ adm =(()=>{
 				alert( '커뮤니티 테이블 생성 성공 여부 : ' + d.msg )
 			})
 		})
-		$('<a>게시글 대량 입력(수업)</a></br>')
-		.appendTo('#right')
-		.click(e=>{
-			e.preventDefault()
-			$.getJSON(_+'/tx/write/arts', d=>{
-				alert( '게시글 입력 성공 여부: ' + d.msg )
-			})
-		})
-		$('<a>게시글 대량 입력(my)</a></br>')
+		$('<a>게시글 대량 입력</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -242,9 +202,41 @@ adm =(()=>{
 			})
 		})
 	}
+	let accnt_mgmt=()=>{
+		$('#right').empty()
+		$('<a>계좌번호 테이블 생성</a></br></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/account/create/table', d=>{
+				alert( '테이블 생성 성공 여부 : ' + d.msg )
+			})
+		})
+		
+		$('<a>계좌번호 테이블 삭제</a></br></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			
+		})
+	}
+	let acchis_mgmt=()=>{
+		$('#right').empty()
+		$('<a>계좌번호이력 테이블 생성</a></br></br>')
+		.appendTo('#right')
+		.click(e=>{
+			e.preventDefault()
+			$.getJSON(_+'/accountHistory/create/table', d=>{
+				alert( '테이블 생성 성공 여부 : ' + d.msg )
+			})
+		})
+	}
+	let trd_mgmt=()=>{
+		$('#right').empty()
+	}
 	let exr_mgmt=()=>{
 		$('#right').empty()
-		$('<a>환율 테이블 생성</a></br>')
+		$('<a>환율 테이블 생성</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -252,7 +244,7 @@ adm =(()=>{
 				alert( '테이블 생성 성공 여부 : ' + d.msg )
 			})
 		})
-		$('<a>환율 테이블 삭제</a></br>')
+		$('<a>환율 테이블 삭제</a></br></br>')
 		.appendTo('#right')
 		.click(e=>{
 			e.preventDefault()
@@ -264,15 +256,15 @@ adm =(()=>{
 			'  <select name="exrate" size="1" >'+	//	multiple
 			'  </select>'+
 			'  <br>'+
-			'  <input class="form-control mr-sm-2" value="국가" type="text" placeholder="exrate" aria-label="Search">'+
+			'  <input class="form-control mr-sm-2" value="국가코드 선택" type="text" placeholder="exrate" aria-label="Search">'+
 			'</form>')
 		.addClass('form-inline my-2 my-lg-0')
 		.appendTo('#right')
 		$('#exrate_form').css({padding : '0 auto', 'padding-top' : '5%'  })	//'padding-top' : '5%' 
 		$('#exrate_form select').css({ 'margin-left' : '20%' , 'margin-right' : '1%'})
 		
-		$.each(['USD', 'CNY', 'JPY', 'EUR'], (i, j)=>{
-			$('<option value="'+ j +'">'+ j +'</option>')
+		$.each(['usd', 'cny', 'jpy', 'eur'], (i, j)=>{
+			$('<option value="'+ j +'">'+ j.toUpperCase() +'</option>')
 			.appendTo('#exrate_form select')
 		})
 		
@@ -280,15 +272,15 @@ adm =(()=>{
 		.appendTo('#exrate_form')
 		.click(e=>{
 			e.preventDefault()		
-			alert('전송 확인')
-			let arr = [$('form#exrate_form select[name="exrate"]').val()]
-			alert('전송 확인 arr : ' + arr)
-			if(	!$.fn.nullChecker(arr) ){			
+		//	alert('전송 확인')
+			let country = $('form#exrate_form select[name="exrate"]').val()
+			
+		//	if(	!$.fn.nullChecker(arr) ){			
 		//		alert(arr[0] + ', '+ arr[1])
-				$.getJSON( _	+ '/tx/write/exrate/' + arr, d=>{		// form 태그의 id란 뜻
-					alert(d.msg)
+				$.getJSON( _+ '/tx/write/exrate/' + country, d=>{		// form 태그의 id란 뜻
+					alert(d.exrateCount)
 				})
-			}
+	//		}
 		})/*
 		$('<a>달러 환율 데이터 입력</a></br>')
 		.appendTo('#right')

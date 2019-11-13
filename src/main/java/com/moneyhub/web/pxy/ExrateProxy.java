@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.moneyhub.web.enums.Path;
 import com.moneyhub.web.exr.ExRate;
 import com.moneyhub.web.exr.ExRateMapper;
+import com.moneyhub.web.utl.Printer;
 
 @Component("exProxy")
 public class ExrateProxy {
@@ -20,6 +23,8 @@ public class ExrateProxy {
 	@Autowired ExRate exr;
 	@Autowired List<ExRate> exlist;
 	@Autowired ExRateMapper exRateMapper;
+	@Autowired Printer p;
+	
 	/*	public void writeTXT(List<ExRate> exlist) {
 	System.out.println(exlist.get(0));
 	System.out.println(exlist.get(1));
@@ -29,33 +34,44 @@ public class ExrateProxy {
 //		System.out.println(e);
 //	map.forEach((k, v) -> System.out.println(String.format("%s : %s", k, v)));
 }*/
+	public String todayDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		String today = sdf.format(date);
+		p.accept(today);
+		return today;
+	}
 	@Transactional
-	public void rwTXT(String country){
+	public void rwTXT(){
 		String line="";
-	//	List<ExRate> tmpList = new ArrayList<>();
 		BufferedReader reader = null;
 		String file = "";
+		String cntCd = exr.getCntcd();
+
+		switch (cntCd) {
+		case "USD":
+			file = "달러_환율변동조회_20191113.tsv";
+			break;
+		case "CNY":
+			file = "위안_환율변동조회_20191113.tsv";
+			break;
+		case "EUR":
+			file = "유로_환율변동조회_20191113.tsv";
+			break;
+		case "JPY":
+			file = "엔화_환율변동조회_20191113.tsv";
+			break;
+		default:
+			break;
+		}
 		try {
-			switch (country) {
-			case "USD":
-				file = "달러_환율변동조회_20191113.tsv";
-				break;
-			case "CNY":
-				file = "위안_환율변동조회_20191113.tsv";
-				break;
-			default:
-				break;
-			}
 			reader = Files.newBufferedReader(Paths.get(Path.EXRATE_FILE_PATH.toString() +file));
 			Charset.forName("UTF-8");
-	//		string = reader.readLine();
-			
-	//bsDate, mBuy, mSell, remSend, remReceive, tcBuy, fcbSell, bsRate, befcon, excommission, dollarRate
+
 			while((line = reader.readLine()) != null) {
-	//		 	tmpList = new ArrayList<>();
 	            String[] arr = line.split("\t");
 	            //배열에서 리스트 반환
-	/*              exr.setBsDate(arr[0]);
+	/*          exr.setBsDate(arr[0]);
 	            exr.setMBuy(arr[1]);
 	            exr.setMSell(arr[2]);
 	            exr.setRemSend(arr[3]);
@@ -68,7 +84,7 @@ public class ExrateProxy {
 	            exr.setDollarRate(arr[10]);*/
 	            exr.setExrate(arr[7]);
 	            exr.setBdate(arr[0]);
-	            exr.setCntcd(country);
+	            exr.setCntcd(cntCd);
 	            System.out.println(exr.toString());
 	            exRateMapper.insertExRate(exr);
 			}
@@ -78,7 +94,7 @@ public class ExrateProxy {
 		}
 	}
 	@Transactional
-	public void insertExrates(String country) {
-		rwTXT(country);
+	public void insertExrates() {
+		rwTXT();
 	}
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moneyhub.web.pxy.PageProxy;
 import com.moneyhub.web.pxy.Trunk;
+import com.moneyhub.web.exr.ExRate;
 import com.moneyhub.web.pxy.Box;
 import com.moneyhub.web.pxy.CrawlingProxy;
 import com.moneyhub.web.utl.Printer;
@@ -29,6 +30,7 @@ public class TxController {
 	@Autowired Trunk<String> trunk;
 	@Autowired CrawlingProxy crawler;
 	@Autowired Box<String> box;
+	@Autowired ExRate exrate;
 	
 	@GetMapping("/crawling/{site}/{srch}")
 	public Map<?, ?> getUrl(@PathVariable String site, 
@@ -66,8 +68,10 @@ public class TxController {
 	}
 	
 	@GetMapping("/write/exrate/{country}")
-	public Map<?, ?> writeExrate(@RequestBody String country) {
-		String exrateCount = txService.writeExrates(country);
+	public Map<?, ?> writeExrate(@PathVariable String country) {
+		p.accept("country : " + country.toUpperCase());
+		exrate.setCntcd(country.toUpperCase());
+		String exrateCount = txService.writeExrates();
 		trunk.put(Arrays.asList("exrateCount"), Arrays.asList(exrateCount));
 		return trunk.get();
 	}
