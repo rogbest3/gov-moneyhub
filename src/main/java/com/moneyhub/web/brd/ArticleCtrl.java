@@ -36,6 +36,7 @@ import com.moneyhub.web.pxy.PageProxy;
 import com.moneyhub.web.pxy.Trunk;
 import com.moneyhub.web.tx.TxService;
 import com.moneyhub.web.pxy.Box;
+import com.moneyhub.web.pxy.FileProxy;
 import com.moneyhub.web.utl.Printer;
 
 import lombok.extern.log4j.Log4j;
@@ -45,17 +46,15 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class ArticleCtrl {
 	private static final Logger logger = LoggerFactory.getLogger(ArticleCtrl.class);
-//	@Autowired Map<String, Object> articleMap;
+
 	@Autowired Customer customer;
 	@Autowired Printer printer;
 	@Autowired ArticleMapper articleMapper;
 	@Autowired Box<Article> box;
 	@Autowired TxService txService;
-//	@Autowired PageProxy pxy;
-//	@Autowired ProxyMap map;
 	@Autowired PageProxy pager;
-//	@Autowired Box box;
 	@Autowired Trunk<Object> trunk;
+	@Autowired FileProxy fileProxy;
 	
 	@PostMapping("/")
 	public Map<?, ?> write(@RequestBody Article param){
@@ -143,19 +142,9 @@ public class ArticleCtrl {
 		return paramMap;
 	}
 
-	@GetMapping("/fileupload")
+	@PostMapping("/fileupload")
 	public void fileUpload(MultipartFile[] uploadFile) {
-		printer.accept("파일 업로드");
-		String uploadFolder = Path.UPLOAD_PATH.toString();
-		for(MultipartFile f : uploadFile) {
-			String fname = f.getOriginalFilename();
-			fname = fname.substring(fname.lastIndexOf("\\"+1));
-			File saveFile = new File(uploadFolder, fname);
-			try {
-				f.transferTo(saveFile);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		fileProxy.fileUpload(uploadFile);
 	}
+
 }

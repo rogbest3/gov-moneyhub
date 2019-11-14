@@ -18,7 +18,7 @@ import com.moneyhub.web.exr.ExRateMapper;
 import com.moneyhub.web.utl.Printer;
 
 @Component("exProxy")
-public class ExrateProxy {
+public class ExrateProxy extends Proxy{
 	
 	@Autowired ExRate exr;
 	@Autowired List<ExRate> exlist;
@@ -35,11 +35,11 @@ public class ExrateProxy {
 //	map.forEach((k, v) -> System.out.println(String.format("%s : %s", k, v)));
 }*/
 	public String todayDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String today = sdf.format(date);
-		p.accept(today);
-		return today;
+		p.accept(today);*/
+		return currentDate();
 	}
 	@Transactional
 	public void rwTXT(){

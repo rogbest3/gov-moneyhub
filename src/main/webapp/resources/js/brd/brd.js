@@ -262,7 +262,7 @@ brd =(()=>{
 			}) 
 		})
 		$('<input>', {
-//			id :'fileupload',
+		//	id :'fileupload',
 			value : '파일업로드',
 			style : 'float:right;width:110px;margin-right:10px;',			
 		})
@@ -272,14 +272,32 @@ brd =(()=>{
 			e.preventDefault()
 			
 			let formData = new FormData()
-			let inpurFile = $('#upload')
-			let files = inpurFile[0].files
+			let files =  $('#upload')[0].files
 			
 		
 			alert(files.lenth)
 			let i=0
-			for(; i<inputFile.length;i++){
-				formData.append('uploadFile', inputFile[i])
+			for(; i<files.length;i++){	//	파일 여러개일때
+				formData.append('uploadFile', files[i])
+		/*		if(	!$.fn.nullChecker(arr) ){			
+
+					$.getJSON( _ + '/tx/crawling/' + arr[0] +'/' + arr[1], d=>{		// form 태그의 id란 뜻
+						alert(d.msg)
+					})
+				}
+				*/
+			/*	if($.fn.checkExtension({fname:files[i].name, fsize:files[i].size})){
+					alert('>>>')
+					return false
+				}*/
+				
+	/*			if(!new CheckExtension({fname:files[i].name, fsize:files[i].size})){
+					alert('>>>')
+					return false
+				}else{
+					formData.append('uploadFile', files[i])
+					
+				}*/
 			}
 			$.ajax({
 				url : _+ '/articles/fileupload',
@@ -294,11 +312,12 @@ brd =(()=>{
 					alert('파일업로드 실패')
 				}
 			})
+			
 				
 		})
 		
 		$('<input>',{
-			multiple : 'multiple',
+		//	multiple : 'multiple',
 			type : 'file', 
 			id : 'upload'
 		})
